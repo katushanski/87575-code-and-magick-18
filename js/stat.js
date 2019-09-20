@@ -1,5 +1,5 @@
 'use strict';
-var canvas = document.getElementById('canvas');
+//var canvas = document.getElementById('canvas');
 
 // var ctx = canvas.getContext('2d');
 // var names = ['Вы', 'Кекс', 'Катя', 'Игорь'];
@@ -21,11 +21,11 @@ var TEXT_WIDTH = 60;
 var BAR_HEIGHT = 160;
 
 
-var renderCloud = funtion(ctx, x, y, color) {
+var renderCloud = function(ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
   ctx.font = '16px PT Mono';
-  ctx.fillText(’Ура вы победили!\nСписок результатов:’, 0, 20);
+  ctx.fillText('Ура вы победили!\nСписок результатов:', 0, 20);
 }
 
 window.renderStatistics = function(ctx) {
