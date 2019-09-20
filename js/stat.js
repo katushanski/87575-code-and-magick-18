@@ -29,22 +29,22 @@ var renderCloud = function(ctx, x, y, color) {
 }
 
 window.renderStatistics = function(ctx) {
-  renderCloud(ctx, CLOUD_X + GAP, CLOUD_Y + GAP, 'rgba(0, 0, 0, 0.7)');
+  renderCloud(ctx, CLOUD_X + 10, CLOUD_Y + 10, 'rgba(0, 0, 0, 0.7)');
   renderCloud(ctx, CLOUD_X, CLOUD_Y, 'rgba(255, 250, 250, 1)');
 
   ctx.fillStyle = 'rgba(255, 250, 250, 1)';
   ctx.fillText('Вы', CLOUD_X + GAP, 300);
   ctx.fillRect(160, 175, 45, BAR_HEIGHT);
 
-  ctx.fillStyle = 'hsl(240, ' + Math.random()', 100%)';
+  ctx.fillStyle = 'hsl(240, ' + Math.random() + ', 100%)';
   ctx.fillText('Кекс', CLOUD_X + GAP, 300);
   ctx.fillRect(260, 175, 45, BAR_HEIGHT);
 
-  ctx.fillStyle = 'hsl(240, ' + Math.random()', 100%)';
+  ctx.fillStyle = 'hsl(240, ' + Math.random() + ', 100%)';
   ctx.fillText('Катя', CLOUD_X + GAP, 300);
   ctx.fillRect(360, 175, 45, BAR_HEIGHT);
 
-  ctx.fillStyle = 'hsl(240, ' + Math.random()', 100%)';
+  ctx.fillStyle = 'hsl(240, ' + Math.random() + ', 100%)';
   ctx.fillText('Игорь', CLOUD_X + GAP, 300);
   ctx.fillRect(460, 175, 45, BAR_HEIGHT);
 }
