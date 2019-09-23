@@ -15,8 +15,8 @@ var cloudParams = {
 };
 
 var barParams = {// могу ли я дублировать название ключей (типа width, height) как в объекте выше?
-  WIDTH: 45,
-  HEIGHT: 160,
+  WIDTH: 40,
+  HEIGHT: 150,
   X: 40,
   Y: 80
 };
@@ -28,21 +28,14 @@ var TOP_INDENT = 40; // Расстояние от верха канваса до
 var BOTTOM_INDENT = 260; // Расстояние от низа до подписи.
 var FONT_GAP = 16; // Отступ, который зависит от размера шрифта.
 var BAR_INDENT = barParams.WIDTH + GAP; // Расстояние, которое занимает столбец вместе с отступом после него.
-var barHeight = 150; // Высота колонок
 
 var renderCloud = function (ctx, x, y, color) {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, cloudParams.WIDTH, cloudParams.HEIGHT);
 };
 
-var getMaxElement = function (arr) {
-  var maxElement = 0;
-  for (var i = 0; i < arr.length; i++) {
-    if (arr[i] > maxElement) {
-      maxElement = arr[i];
-    }
-  }
-  return maxElement;
+var getMaxElement = function getMaxOfArray(times) {
+  return Math.max.apply(null, times);
 };
 
 window.renderStatistics = function (ctx, names, times) {
@@ -61,13 +54,15 @@ window.renderStatistics = function (ctx, names, times) {
   // }
 
   for (var i = 0; i < names.length; i++) {
-    var barHeightCurrent = barHeight * times[i] / maxTime; // расчёт высоты колонок в зависимости от времени
+    var barHeightCurrent = barParams.HEIGHT * times[i] / maxTime; // расчёт высоты колонок в зависимости от времени
+    var coordX = barParams.X + ((i + 1) * BAR_INDENT); // координата по оси x, одна и та же для имен, текста и колонок
+    var barCoordY = cloudParams.HEIGHT + cloudParams.Y - barHeightCurrent - TOP_INDENT; // координата колонки по оси Y, нужна для отрисовки колонки и чтобы относительно нее найти координату Y для текста результата
 
     ctx.fillStyle = 'rgba(0, 0, 0, 1)';
-    ctx.fillText(Math.round(times[i]), barParams.X + cloudParams.X + (i * BAR_INDENT), GAP, cloudParams.HEIGHT + cloudParams.Y - barHeightCurrent);
+    ctx.fillText(Math.round(times[i]), coordX, barCoordY - FONT_GAP, cloudParams.HEIGHT + cloudParams.Y - barHeightCurrent);
 
-    ctx.fillStyle = (names[i] === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + Math.random() + ', 100%)';
-    ctx.fillText(names[i], barParams.X + ((i + 1) * BAR_INDENT), BOTTOM_INDENT);
-    ctx.fillRect(barParams.X + ((i + 1) * BAR_INDENT), cloudParams.HEIGHT + cloudParams.Y - barHeightCurrent - TOP_INDENT, barParams.WIDTH, barHeightCurrent);
+    ctx.fillText(names[i], coordX, BOTTOM_INDENT);
+    ctx.fillStyle = (names[i] === 'Вы') ? 'rgba(255, 0, 0, 1)' : 'hsl(240, ' + (Math.random() * 100) + '%' + ', 50%)';
+    ctx.fillRect(coordX, barCoordY, barParams.WIDTH, barHeightCurrent);
   }
 };
