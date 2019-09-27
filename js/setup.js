@@ -1,6 +1,6 @@
 // Код должен быть разделен на отдельные функции. Стоит отдельно объявить функцию генерации случайных данных, функцию создания DOM-элемента на основе JS-объекта,
 // функцию заполнения блока DOM-элементами на основе массива JS-объектов. Пункты задания примерно соответствуют функциям, которые вы должны создать.
-'use strict'
+'use strict';
 
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
@@ -33,7 +33,7 @@ var wizard = function () {
     };
     wizardArmy += currentWizard;
   }
-  return wizardArmy
+  return wizardArmy;
 };
 
 wizard();
