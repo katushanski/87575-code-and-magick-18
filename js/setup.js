@@ -1,5 +1,6 @@
 // Код должен быть разделен на отдельные функции. Стоит отдельно объявить функцию генерации случайных данных, функцию создания DOM-элемента на основе JS-объекта,
 // функцию заполнения блока DOM-элементами на основе массива JS-объектов. Пункты задания примерно соответствуют функциям, которые вы должны создать.
+'use strict'
 
 var userDialog = document.querySelector('.setup');
 userDialog.classList.remove('hidden');
@@ -16,20 +17,24 @@ var coatColorArray = [
 ];
 var eyesColorArray = ['black', 'red', 'blue', 'yellow', 'green'];
 
-var randomElement = function(randomizedArray) {
+var randomElement = function (randomizedArray) {
   var number = [Math.floor(Math.random() * randomizedArray.length)];
 
   return number;
-}
+};
 
-var wizard = function() {
+var wizard = function () {
   var wizardArmy = [];
   for (var i = 0; i <= 3; i++) {
     var currentWizard = {
       name: nameArray[randomElement(nameArray)] + ' ' + surnameArray[randomElement(surnameArray)],
       coatColor: coatColorArray[randomElement(coatColorArray)],
       eyesColor: eyesColorArray[randomElement(eyesColorArray)]
-    }
+    };
+    wizardArmy += currentWizard;
   }
-}
+  return wizardArmy
+};
+
+wizard();
 
