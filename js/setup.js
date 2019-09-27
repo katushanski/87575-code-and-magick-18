@@ -26,9 +26,9 @@ var wizard = function() {
   var wizardArmy = [];
   for (var i = 0; i <= 3; i++) {
     var currentWizard = {
-      name: nameArray[randomElement(nameArray)] + ' ' + surnameArray[randomElement(surnameArray)];
-      coatColor: coatColorArray[randomElement(coatColorArray)];
-      eyesColor: eyesColorArray[randomElement(eyesColorArray)];
+      name: nameArray[randomElement(nameArray)] + ' ' + surnameArray[randomElement(surnameArray)],
+      coatColor: coatColorArray[randomElement(coatColorArray)],
+      eyesColor: eyesColorArray[randomElement(eyesColorArray)]
     }
   }
 }
