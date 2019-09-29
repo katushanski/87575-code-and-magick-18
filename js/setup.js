@@ -1,12 +1,3 @@
-// Код должен быть разделен на отдельные функции. Стоит отдельно объявить функцию генерации случайных данных, функцию создания DOM-элемента на основе JS-объекта,
-// функцию заполнения блока DOM-элементами на основе массива JS-объектов. Пункты задания примерно соответствуют функциям, которые вы должны создать.
-
-// На основе данных, созданных в предыдущем пункте и шаблона #similar-wizard-template создайте DOM-элементы, соответствующие случайно сгенерированным волшебникам и заполните их данными из массива:
-// имя персонажа name запишите как текст в блок .setup-similar-label;
-// цвет мантии coatColor задайте как цвет заливки fill в стилях элемента .wizard-coat;
-// цвет глаз eyesColor задайте как цвет заливки fill в стилях элемента .wizard-eyes.
-// Отрисуйте сгенерированные DOM-элементы в блок .setup-similar-list. Для вставки элементов используйте DocumentFragment.
-// Покажите блок .setup-similar, удалив у него CSS-класс hidden.
 'use strict';
 
 var userDialog = document.querySelector('.setup');
@@ -15,9 +6,9 @@ userDialog.classList.remove('hidden');
 userDialog.querySelector('.setup-similar').classList.remove('hidden');
 
 var similarListElement = document.querySelector('.setup-similar-list');
-var similarWizardTemplate = document.querySelector('#similar-wizard-template')
+var similarWizardTemplate = document.querySelector('#similar-wizard-template') // нахожу шаблон, который буду копировать
     .content
-    .querySelector('.setup-similar-item');
+    .querySelector('.setup-similar-item'); // нахожу элемент, в который буду вставлять похожих магов
 
 var WIZARDS_AMOUNT = 4;
 
@@ -29,28 +20,27 @@ var wizardParams = {
 };
 
 var getRandomElement = function (elements) {
-  var number = [Math.floor(Math.random() * elements.length)];
-
-  return number;
-};
+  return elements[Math.floor(Math.random() * elements.length)];
+}; // функция-генератор случайных чисел
 
 var generateWizards = function (amount) {
-  var wizards = [];
-  for (var i = 0; i < amount; i++) {
+  var wizards = []; // создаю пустой массив, в который будут добавляться с помощью функции новые объекты-волшебники
+  for (var i = 0; i < amount; i++) { // генерю amount объектов
     var wizard = {
       name: getRandomElement(wizardParams.NAMES) + ' ' + getRandomElement(wizardParams.SURNAMES),
       coatColor: getRandomElement(wizardParams.COAT_COLORS),
       eyesColor: getRandomElement(wizardParams.EYES_COLORS)
     };
-    wizards.push(wizard);
+    wizards.push(wizard); // .push добавляет объект в массив
   }
-  return wizards;
+  return wizards; // результат функции - массив wizards, который содержит amount объектов-волшебников
 };
 
-generateWizards(WIZARDS_AMOUNT);
+var wizards = generateWizards(WIZARDS_AMOUNT); // сообщаю, что в массив мне нужно добавить объекты из generateWizards
 
 var createWizard = function (wizard) {
-  var wizardElement = similarWizardTemplate.cloneNode(true); // клонирую тейплейт
+  var wizardElement = similarWizardTemplate.cloneNode(true); // клонирую шаблон
+
   wizardElement.querySelector('.setup-similar-label').textContent = wizard.name; // нахожу нужные элементы (querySelector плюс классы из задания) и задаю параметры волшебника
   wizardElement.querySelector('.wizard-coat').style.fill = wizard.coatColor;
   wizardElement.querySelector('.wizard-eyes').style.fill = wizard.eyesColor;
@@ -58,10 +48,19 @@ var createWizard = function (wizard) {
   return wizardElement;
 };
 
-var renderWizards = document.createDocumentFragment();
-for (var i = 0; i < generateWizards().length; i++) {
-  renderWizards.appendChild(createWizard(generateWizards()[i]));
-}
+var renderWizards = function (wizardsFragment) { // в качетве параметра волшебники, которых снегенировала
+  var fragment = document.createDocumentFragment(); // создала фрагмент
 
-similarListElement.appendChild(renderWizards);
+  wizardsFragment.forEach(function (wizard) {
+    fragment.appendChild(createWizard(wizard)); // добавила во фрагмент элемент волшбеника
+  });
 
+  // или аналогично с for
+  // for (var i = 0; i < wizards.length; i++) {
+  //     fragment.appendChild(createWizard(wizards[i]));
+  // }
+
+  similarListElement.appendChild(fragment); // добавила фрагмент в разметку
+};
+
+renderWizards(wizards);
