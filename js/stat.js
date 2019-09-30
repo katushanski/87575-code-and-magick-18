@@ -1,10 +1,5 @@
 'use strict';
 
-// var renderStatistics = {
-//   window: function (ctx, names, times) {
-//     console.log () , names, times
-//   }
-// }
 
 var cloudParams = {
   WIDTH: 420,
@@ -14,7 +9,7 @@ var cloudParams = {
   Y: 10
 };
 
-var barParams = {// могу ли я дублировать название ключей (типа width, height) как в объекте выше?
+var barParams = {
   WIDTH: 40,
   HEIGHT: 150,
   X: 40,
@@ -48,10 +43,6 @@ window.renderStatistics = function (ctx, names, times) {
   ctx.fillText('Список результатов:', cloudParams.X + barParams.X, TOP_INDENT + FONT_GAP);
 
   var maxTime = getMaxElement(times);
-
-  // names.forEach(function (name, i) {
-  // name - элемент массива names; i - индекс этого элемента; times[i] - элемент массива times соответствующий name
-  // }
 
   for (var i = 0; i < names.length; i++) {
     var barHeightCurrent = barParams.HEIGHT * times[i] / maxTime; // расчёт высоты колонок в зависимости от времени
