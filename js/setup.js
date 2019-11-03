@@ -1,14 +1,24 @@
 'use strict';
-var ESC_KEYCODE = 27;
-var ENTER_KEYCODE = 13;
+var keyCode = {
+  ESC: 27,
+  ENTER: 13
+};
 
 var userDialogElement = document.querySelector('.setup');
 
 // Открытие/закрытие окна настройки персонажа:
 var onPopupEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
+  if (isEscEvent(evt)) {
     closePopup();
   }
+};
+
+var isEscEvent = function (evt) {
+  return evt.keyCode === keyCode.ESC;
+};
+
+var isEntEvent = function (evt) {
+  return evt.keyCode === keyCode.ENTER;
 };
 
 var openPopup = function () {
@@ -27,12 +37,10 @@ openDialogElement.addEventListener('click', function () {
 });
 
 var openDialogIcon = openDialogElement.querySelector('.setup-open-icon');
-openDialogIcon.addEventListener('focus', function () { // Маша, можно ли так записать? логика есть? я подсмотрела уже в демке, что можно проще, но поскольку изначально писала самостоятельно, чтобы разобраться, теперь интересно, можно ли так написать.
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ENTER_KEYCODE) {
-      openPopup();
-    }
-  });
+openDialogIcon.addEventListener('keydown', function (evt) {
+  if (isEntEvent(evt)) {
+    openPopup();
+  }
 });
 
 var closeDialogElement = userDialogElement.querySelector('.setup-close');
@@ -54,8 +62,8 @@ formSubmitButton.addEventListener('click', function (evt) {
 
 formSubmitButton.addEventListener('focus', function (evt) {
   evt.preventDefault();
-  document.addEventListener('keydown', function (event) {
-    if (event.keyCode === ENTER_KEYCODE) {
+  document.addEventListener('keydown', function () {
+    if (isEntEvent()) {
       setupForm.submit();
     }
   });
@@ -75,57 +83,41 @@ usernameInput.addEventListener('invalid', function (evt) {
   }
 });
 
-// Кастомизация персонажа
-var myWizardParams = {
-  COAT_COLORS: ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'],
-  EYES_COLORS: ['black', 'red', 'blue', 'yellow', 'green'],
-  FIREBALL_COLORS: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848']
-};
-
 // Изменение цвета мантии персонажа по нажатию
 var setupPlayer = document.querySelector('.setup-player');
 var setupMyWizard = setupPlayer.querySelector('.setup-wizard');
-var coatColorMyWizard = setupMyWizard.querySelector('.wizard-coat');
-var eyesColorMyWizard = setupMyWizard.querySelector('.wizard-eyes');
-var fireballColorMyWizard = setupPlayer.querySelector('.setup-fireball-wrap');
+var wizardCoat = setupMyWizard.querySelector('.wizard-coat');
+var wizardEyes = setupMyWizard.querySelector('.wizard-eyes');
+var wizardFireball = setupPlayer.querySelector('.setup-fireball-wrap');
+
+var inputCoatColor = setupPlayer.querySelector('input[name="coat-color"]');
+var inputEyesColor = setupPlayer.querySelector('input[name="eyes-color"]');
+var inputFireballColor = wizardFireball.querySelector('input[name="fireball-color"]');
 
 var currentCoatIndex = 0;
 var currentEyesIndex = 0;
 var currentFireballIndex = 0;
 
-var getWizardParam = function (colors, index) {
-  index += 1;
-  return colors[index];
+var getNextIndex = function (index, length) {
+  return index + 1 === length ? 0 : index + 1;
 };
 
-coatColorMyWizard.addEventListener('click', function () {
-  coatColorMyWizard.style.fill = getWizardParam(myWizardParams.COAT_COLORS, currentCoatIndex);
-  setupPlayer.querySelector('input[name="coat-color"]').value = coatColorMyWizard.style.fill;
-  if (currentCoatIndex <= myWizardParams.COAT_COLORS.length) {
-    currentCoatIndex++;
-  } else if (currentCoatIndex > myWizardParams.COAT_COLORS.length) {
-    currentCoatIndex = 0;
-  }
+wizardCoat.addEventListener('click', function () {
+  currentCoatIndex = getNextIndex(currentCoatIndex, wizardParams.COAT_COLORS.length);
+  inputCoatColor.value = wizardParams.COAT_COLORS[currentCoatIndex];
+  wizardCoat.style.fill = inputCoatColor.value;
 });
 
-eyesColorMyWizard.addEventListener('click', function () {
-  eyesColorMyWizard.style.fill = getWizardParam(myWizardParams.EYES_COLORS, currentEyesIndex);
-  setupPlayer.querySelector('input[name="eyes-color"]').value = eyesColorMyWizard.style.fill;
-  if (currentEyesIndex <= myWizardParams.EYES_COLORS.length) {
-    currentEyesIndex++;
-  } else if (currentEyesIndex > myWizardParams.EYES_COLORS.length) {
-    currentEyesIndex = 0;
-  }
+wizardEyes.addEventListener('click', function () {
+  currentEyesIndex = getNextIndex(currentEyesIndex, wizardParams.EYES_COLORS.length);
+  inputEyesColor.value = wizardParams.EYES_COLORS[currentEyesIndex];
+  wizardEyes.style.fill = inputEyesColor.value;
 });
 
-fireballColorMyWizard.addEventListener('click', function () {
-  fireballColorMyWizard.style.backgroundColor = getWizardParam(myWizardParams.FIREBALL_COLORS, currentFireballIndex);
-  fireballColorMyWizard.querySelector('input[name="fireball-color"]').value = fireballColorMyWizard.style.backgroundColor;
-  if (currentFireballIndex <= myWizardParams.FIREBALL_COLORS.length) {
-    currentFireballIndex++;
-  } else if (currentFireballIndex > myWizardParams.FIREBALL_COLORS.length) {
-    currentFireballIndex = 0;
-  }
+wizardFireball.addEventListener('click', function () {
+  currentFireballIndex = getNextIndex(currentFireballIndex, wizardParams.FIREBALL_COLORS.length);
+  inputFireballColor.value = wizardParams.FIREBALL_COLORS[currentFireballIndex];
+  wizardFireball.style.backgroundColor = inputFireballColor.value;
 });
 
 // Создание армии магов
@@ -143,7 +135,8 @@ var wizardParams = {
   NAMES: ['Иван', 'Хуан', 'Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'],
   SURNAMES: ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'],
   COAT_COLORS: ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'],
-  EYES_COLORS: ['black', 'red', 'blue', 'yellow', 'green']
+  EYES_COLORS: ['black', 'red', 'blue', 'yellow', 'green'],
+  FIREBALL_COLORS: ['#ee4830', '#30a8ee', '#5ce6c0', '#e848d5', '#e6e848']
 };
 
 var getRandomElement = function (elements) {
